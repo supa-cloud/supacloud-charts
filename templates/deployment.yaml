@@ -6,7 +6,7 @@ metadata:
   labels:
     app: {{ .Values.appName }}
 spec:
-  replicas: 5
+  replicas: 2 
   selector:
     matchLabels:
       app: {{ .Values.appName }}
@@ -22,14 +22,14 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
-        - containerPort: 80
+        - containerPort: 3000 
         envFrom:
         - configMapRef:
             name: {{ .Values.configmap.name }} 
         resources:
           requests:
-            memory: "16Mi" 
-            cpu: "50m"    # 50 milli cores (1/20 CPU)
+            memory: "2Gi" 
+            cpu: "2000m"    
           limits:
-            memory: "128Mi" # 128 mebibytes 
-            cpu: "100m"
+            memory: "2Gi" 
+            cpu: "2000m"

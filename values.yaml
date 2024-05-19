@@ -1,7 +1,7 @@
 appName: myhelmapp
 namespace: default
 configmap:
-  name: myconfigmapv1.0
+  name: myconfigmapv2.0
   data:
     BG_COLOR: '#12181b'
     FONT_COLOR: '#FFFFFF'
