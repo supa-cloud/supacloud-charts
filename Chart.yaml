@@ -1,6 +1,6 @@
 apiVersion: v2
-name: webapp1
-description: A Helm chart for Kubernetes
+name: supacloud-helm 
+description: Supacloud helm 
 
 type: application
 
