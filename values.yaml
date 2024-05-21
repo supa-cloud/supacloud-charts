@@ -1,8 +1,8 @@
-appName: myhelmapp
+appName: test-argo-app 
 namespace: default
 replicaCount: 2
 image: 
-  repository: devopsjourney1/mywebapp
+  repository: metabase/metabase
   tag: latest
   pullPolicy: IfNotPresent
 container: 
