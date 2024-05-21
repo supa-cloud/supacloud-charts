@@ -2,7 +2,7 @@ appName: test-argo-app
 namespace: default
 replicaCount: 2
 image: 
-  repository: metabase/metabase
+  repository: devopsjourney1/mywebapp
   tag: latest
   pullPolicy: IfNotPresent
 container: 
