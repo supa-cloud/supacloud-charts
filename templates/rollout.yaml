@@ -1,15 +1,20 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
   name: {{ .Values.appName }}
   namespace: {{ .Values.namespace }}
   labels:
     app: {{ .Values.appName }}
 spec:
-  replicas: {{ .Values.replicaCount  }} 
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: {{ .Values.appName }}
+  strategy:
+    blueGreen:                 # Blue-green deployment strategy
+      activeService: {{ .Values.appName }}-active
+      previewService: {{ .Values.appName }}-preview
+      autoPromotionEnabled: true
   template:
     metadata:
       labels:
@@ -20,7 +25,7 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
-        - containerPort: {{ .Values.container.port }} 
+        - containerPort: {{ .Values.container.port }}
         env:
         {{- range $key, $value := .Values.container.env }}
         - name: {{ $key }}
@@ -28,4 +33,3 @@ spec:
         {{- end }}
         resources:
           {{- toYaml .Values.container.resources | nindent 10 }}
-      restartPolicy: Always
