@@ -20,16 +20,8 @@
 #       cpu: "2000m"
 # service:
 #   port: 80
-
-# # autoscaling:
-# #   minReplicas: 1
-# #   maxReplicas: 2
-# #   targetCPUUtilizationPercentage: 10
-# #   targetMemoryUtilizationPercentage: 10
-# # keda:
-# #   minReplicaCount: 1
-# #   maxReplicaCount: 3
-# #   triggerType: kafka # example trigger type
-# #   triggerMetadata:
-# #     topic: my-topic
-# #     bootstrapServers: my-kafka-bootstrap:9092
+# autoscaling:
+#   enabled: true
+#   minReplicas: 1
+#   maxReplicas: 10
+#   targetCPUUtilizationPercentage: 50
