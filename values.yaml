@@ -1,0 +1,35 @@
+# appName: test-argo-app
+# namespace: default
+# replicaCount: 2
+# image:
+#   repository: devopsjourney1/mywebapp
+#   tag: latest
+#   pullPolicy: IfNotPresent
+# container:
+#   port: 3000
+#   env:
+#     BG_COLOR: "#FFFFFF"
+#     FONT_COLOR: "#000000"
+#     CUSTOM_HEADER: "Hello from Helm!"
+#   resources:
+#     requests:
+#       memory: "2Gi"
+#       cpu: "2000m"
+#     limits:
+#       memory: "2Gi"
+#       cpu: "2000m"
+# service:
+#   port: 80
+
+# # autoscaling:
+# #   minReplicas: 1
+# #   maxReplicas: 2
+# #   targetCPUUtilizationPercentage: 10
+# #   targetMemoryUtilizationPercentage: 10
+# # keda:
+# #   minReplicaCount: 1
+# #   maxReplicaCount: 3
+# #   triggerType: kafka # example trigger type
+# #   triggerMetadata:
+# #     topic: my-topic
+# #     bootstrapServers: my-kafka-bootstrap:9092
