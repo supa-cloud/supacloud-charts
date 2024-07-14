@@ -1,0 +1,17 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ .Values.appName }}-scaledobject
+  namespace: {{ .Values.namespace }}
+spec:
+  scaleTargetRef:
+    kind: Rollout
+    name: {{ .Values.appName }}
+  minReplicaCount: {{ .Values.keda.minReplicaCount }}
+  maxReplicaCount: {{ .Values.keda.maxReplicaCount }}
+  triggers:
+  - type: {{ .Values.keda.triggerType }}
+    metadata:
+      {{- range $key, $value := .Values.keda.triggerMetadata }}
+      {{ $key }}: "{{ $value }}"
+      {{- end }}

@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ .Values.appName }}-vs
+  namespace: {{ .Values.namespace }}
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - istio-system/ingressgateway
+  http:
+  - route:
+    - destination:
+        host: {{ .Values.appName }}-active
+        port:
+          number: {{ .Values.service.port }}
