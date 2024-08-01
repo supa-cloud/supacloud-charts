@@ -20,6 +20,10 @@ spec:
       labels:
         app: {{ .Values.appName }}
     spec:
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+      {{- end }}
       containers:
       - name: {{ .Values.appName }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -33,3 +37,15 @@ spec:
         {{- end }}
         resources:
           {{- toYaml .Values.container.resources | nindent 10 }}
+
+---
+{{- if .Values.imageCredentials }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Values.appName }}-regcred
+  namespace: {{ .Values.namespace }}
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ printf "{\"auths\":{\"%s\":{\"username\":\"%s\",\"password\":\"%s\",\"auth\":\"%s\"}}}" .Values.imageCredentials.registry .Values.imageCredentials.username .Values.imageCredentials.password (printf "%s:%s" .Values.imageCredentials.username .Values.imageCredentials.password | b64enc) | b64enc }}
+{{- end }}
