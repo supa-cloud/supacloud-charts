@@ -5,10 +5,34 @@ metadata:
   namespace: {{ .Values.namespace }}
 spec:
   hosts:
-  - "*"
+  - "{{ .Values.baseDomain }}"
+  {{- range .Values.routes }}
+  - "{{ .subdomain }}.{{ $.Values.baseDomain }}"
+  {{- end }}
   gateways:
-  - istio-system/ingressgateway
+  - {{ .Values.appName }}-gateway
   http:
+  {{- range .Values.routes }}
+  {{- if .subdomain }}
+  - match:
+    - authority:
+        exact: "{{ .subdomain }}.{{ $.Values.baseDomain }}"
+    route:
+    - destination:
+        host: {{ .service }}
+        port:
+          number: {{ $.Values.service.port }}
+  {{- else if .prefix }}
+  - match:
+    - uri:
+        prefix: "{{ .prefix }}"
+    route:
+    - destination:
+        host: {{ .service }}
+        port:
+          number: {{ $.Values.service.port }}
+  {{- end }}
+  {{- end }}
   - route:
     - destination:
         host: {{ .Values.appName }}-active

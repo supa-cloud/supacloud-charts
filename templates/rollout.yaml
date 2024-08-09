@@ -6,15 +6,20 @@ metadata:
   labels:
     app: {{ .Values.appName }}
 spec:
-  # replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: {{ .Values.appName }}
-  strategy:
-    blueGreen:                 # Blue-green deployment strategy
-      activeService: {{ .Values.appName }}-active
-      previewService: {{ .Values.appName }}-preview
-      autoPromotionEnabled: true
+strategy:
+  blueGreen:
+    activeService: {{ .Values.appName }}-active
+    previewService: {{ .Values.appName }}-preview
+    autoPromotionEnabled: true 
+    prePromotionAnalysis:
+      templates:
+      - templateName: success-rate
+      args:
+      - name: service-name
+        value: {{ .Values.appName }}-preview
   template:
     metadata:
       labels:
@@ -30,6 +35,18 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: {{ .Values.container.port }}
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.probes.readiness.path }}
+            port: {{ .Values.container.port }}
+          initialDelaySeconds: {{ .Values.probes.readiness.initialDelaySeconds }}
+          periodSeconds: {{ .Values.probes.readiness.periodSeconds }}
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.probes.liveness.path }}
+            port: {{ .Values.container.port }}
+          initialDelaySeconds: {{ .Values.probes.liveness.initialDelaySeconds }}
+          periodSeconds: {{ .Values.probes.liveness.periodSeconds }}
         env:
         {{- range $key, $value := .Values.container.env }}
         - name: {{ $key }}

@@ -26,3 +26,19 @@
 #   maxReplicas: 10
 #   targetCPUUtilizationPercentage: 50
 #   targetMemoryUtilizationPercentage: 10
+# probes:
+#   readiness:
+#     path: /healthz
+#     initialDelaySeconds: 10
+#     periodSeconds: 5
+#   liveness:
+#     path: /healthz
+#     initialDelaySeconds: 15
+#     periodSeconds: 10
+# routes:
+#   - subdomain: "api"
+#     service: "api-service"
+#   - prefix: "/blogs"
+#     service: "blog-service"
+#   - subdomain: "admin"
+#     service: "admin-service"
