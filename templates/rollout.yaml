@@ -35,18 +35,24 @@ strategy:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: {{ .Values.container.port }}
+        {{- if .Values.probes }}
+        {{- if .Values.probes.readiness }}
         readinessProbe:
           httpGet:
             path: {{ .Values.probes.readiness.path }}
             port: {{ .Values.container.port }}
           initialDelaySeconds: {{ .Values.probes.readiness.initialDelaySeconds }}
           periodSeconds: {{ .Values.probes.readiness.periodSeconds }}
+        {{- end }}
+        {{- if .Values.probes.liveness }}
         livenessProbe:
           httpGet:
             path: {{ .Values.probes.liveness.path }}
             port: {{ .Values.container.port }}
           initialDelaySeconds: {{ .Values.probes.liveness.initialDelaySeconds }}
           periodSeconds: {{ .Values.probes.liveness.periodSeconds }}
+        {{- end }}
+        {{- end }}
         env:
         {{- range $key, $value := .Values.container.env }}
         - name: {{ $key }}
