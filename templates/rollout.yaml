@@ -21,6 +21,8 @@ spec:
         args:
         - name: service-name
           value: {{ .Values.appName }}-preview
+        requiredForCompletion: true
+        count: 1
   template:
     metadata:
       labels:
