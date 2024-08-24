@@ -18,6 +18,7 @@ spec:
       prePromotionAnalysis:
         templates:
         - templateName: success-rate
+          clusterScope: false
         args:
         - name: service-name
           value: {{ .Values.appName }}-preview
