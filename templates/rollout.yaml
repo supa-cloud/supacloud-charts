@@ -10,17 +10,6 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.appName }}
-strategy:
-  blueGreen:
-    activeService: {{ .Values.appName }}-active
-    previewService: {{ .Values.appName }}-preview
-    autoPromotionEnabled: true 
-    prePromotionAnalysis:
-      templates:
-      - templateName: success-rate
-      args:
-      - name: service-name
-        value: {{ .Values.appName }}-preview
   template:
     metadata:
       labels:
