@@ -7,16 +7,16 @@ spec:
   hosts:
   - "{{ .Values.baseDomain }}"
   {{- range .Values.routes }}
-  - "{{ .subdomain }}.{{ $.Values.baseDomain }}"
+  - "{{ .subDomain }}.{{ $.Values.baseDomain }}"
   {{- end }}
   gateways:
   - {{ .Values.appName }}-gateway
   http:
   {{- range .Values.routes }}
-  {{- if .subdomain }}
+  {{- if .subDomain }}
   - match:
     - authority:
-        exact: "{{ .subdomain }}.{{ $.Values.baseDomain }}"
+        exact: "{{ .subDomain }}.{{ $.Values.baseDomain }}"
     route:
     - destination:
         host: {{ .service }}

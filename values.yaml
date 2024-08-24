@@ -36,9 +36,9 @@
 #     initialDelaySeconds: 15
 #     periodSeconds: 10
 # routes:
-#   - subdomain: "api"
+#   - subDomain: "api"
 #     service: "api-service"
 #   - prefix: "/blogs"
 #     service: "blog-service"
-#   - subdomain: "admin"
+#   - subDomain: "admin"
 #     service: "admin-service"
