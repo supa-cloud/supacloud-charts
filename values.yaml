@@ -29,7 +29,6 @@
 #   maxReplicas: 10
 #   targetCPUUtilizationPercentage: 50
 #   targetMemoryUtilizationPercentage: 10
-# ignoreAnalysisTemplate: false
 # probes:
 #   readiness:
 #     path: /healthz

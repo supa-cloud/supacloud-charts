@@ -15,15 +15,15 @@ spec:
       activeService: {{ .Values.appName }}-active
       previewService: {{ .Values.appName }}-preview
       autoPromotionEnabled: true 
-      prePromotionAnalysis:
-        templates:
-        - templateName: success-rate
-          clusterScope: false
-        args:
-        - name: service-name
-          value: {{ .Values.appName }}-preview
-        requiredForCompletion: true
-        count: 1
+      # prePromotionAnalysis:
+      #   templates:
+      #   - templateName: success-rate
+      #     clusterScope: false
+      #   args:
+      #   - name: service-name
+      #     value: {{ .Values.appName }}-preview
+      #   requiredForCompletion: true
+      #   count: 1
   template:
     metadata:
       labels:

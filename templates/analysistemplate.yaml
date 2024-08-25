@@ -1,22 +1,22 @@
-apiVersion: argoproj.io/v1alpha1
-kind: AnalysisTemplate
-metadata:
-  name: success-rate
-  namespace: {{ .Values.namespace }}
-spec:
-  metrics:
-  - name: success-rate
-    interval: 5m
-    count: 1
-    successCondition: result[0] >= 0.95
-    failureLimit: 1
-    provider:
-      prometheus:
-        address: http://prometheus.istio-system:9090
-        query: |
-          sum(irate(
-            istio_requests_total{reporter="source",destination_service=~"{{.Values.appName}}-preview",response_code!~"5.*"}[5m]
-          )) /
-          sum(irate(
-            istio_requests_total{reporter="source",destination_service=~"{{.Values.appName}}-preview"}[5m]
-          ))
+# apiVersion: argoproj.io/v1alpha1
+# kind: AnalysisTemplate
+# metadata:
+#   name: success-rate
+#   namespace: {{ .Values.namespace }}
+# spec:
+#   metrics:
+#   - name: success-rate
+#     interval: 5m
+#     count: 1
+#     successCondition: result[0] >= 0.95
+#     failureLimit: 1
+#     provider:
+#       prometheus:
+#         address: http://prometheus.istio-system:9090
+#         query: |
+#           sum(irate(
+#             istio_requests_total{reporter="source",destination_service=~"{{.Values.appName}}-preview",response_code!~"5.*"}[5m]
+#           )) /
+#           sum(irate(
+#             istio_requests_total{reporter="source",destination_service=~"{{.Values.appName}}-preview"}[5m]
+#           ))
