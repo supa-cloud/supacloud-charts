@@ -1,6 +1,9 @@
 # appName: test-argo-app
 # namespace: default
 # replicaCount: 2
+# baseDomain: "devopsjourney.com"
+# routes:
+#   subDomain: "api"
 # image:
 #   repository: devopsjourney1/mywebapp
 #   tag: latest
@@ -35,10 +38,3 @@
 #     path: /healthz
 #     initialDelaySeconds: 15
 #     periodSeconds: 10
-# routes:
-#   - subDomain: "api"
-#     service: "api-service"
-#   - prefix: "/blogs"
-#     service: "blog-service"
-#   - subDomain: "admin"
-#     service: "admin-service"

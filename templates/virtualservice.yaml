@@ -6,33 +6,18 @@ metadata:
 spec:
   hosts:
   - "{{ .Values.baseDomain }}"
-  {{- range .Values.routes }}
-  - "{{ .subDomain }}.{{ $.Values.baseDomain }}"
-  {{- end }}
+  - "{{ .Values.routes.subDomain }}.{{ .Values.baseDomain }}"
   gateways:
   - {{ .Values.appName }}-gateway
   http:
-  {{- range .Values.routes }}
-  {{- if .subDomain }}
   - match:
     - authority:
-        exact: "{{ .subDomain }}.{{ $.Values.baseDomain }}"
+        exact: "{{ .Values.routes.subDomain }}.{{ .Values.baseDomain }}"
     route:
     - destination:
-        host: {{ .service }}
+        host: {{ .Values.appName }}-active
         port:
-          number: {{ $.Values.service.port }}
-  {{- else if .prefix }}
-  - match:
-    - uri:
-        prefix: "{{ .prefix }}"
-    route:
-    - destination:
-        host: {{ .service }}
-        port:
-          number: {{ $.Values.service.port }}
-  {{- end }}
-  {{- end }}
+          number: {{ .Values.service.port }}
   - route:
     - destination:
         host: {{ .Values.appName }}-active
