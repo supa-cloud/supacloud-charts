@@ -14,3 +14,23 @@ spec:
     hosts:
     - "{{ .Values.baseDomain }}"
     - "*.{{ .Values.baseDomain }}"
+    tls:
+      httpsRedirect: true
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - "{{ .Values.baseDomain }}"
+    - "*.{{ .Values.baseDomain }}"
+    tls:
+      mode: SIMPLE
+      credentialName: {{ .Values.appName }}-tls
+      minProtocolVersion: TLSV1_2
+      cipherSuites:
+      - ECDHE-ECDSA-AES256-GCM-SHA384
+      - ECDHE-RSA-AES256-GCM-SHA384
+      - ECDHE-ECDSA-CHACHA20-POLY1305
+      - ECDHE-RSA-CHACHA20-POLY1305
+      - ECDHE-ECDSA-AES128-GCM-SHA256
+      - ECDHE-RSA-AES128-GCM-SHA256
