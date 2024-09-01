@@ -11,5 +11,5 @@ spec:
      commonName: {{ .Values.baseDomain }}
      dnsNames:
      - {{ .Values.baseDomain }}
-     - "*.{{ .Values.baseDomain }}"
+     - "{{ .Values.subDomain }}.{{ .Values.baseDomain }}"
    

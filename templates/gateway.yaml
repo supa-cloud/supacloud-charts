@@ -13,7 +13,7 @@ spec:
       protocol: HTTP
     hosts:
     - "{{ .Values.baseDomain }}"
-    - "*.{{ .Values.baseDomain }}"
+    - "{{ .Values.subDomain }}.{{ .Values.baseDomain }}"
     tls:
       httpsRedirect: false 
   - port:
@@ -22,7 +22,7 @@ spec:
       protocol: HTTPS
     hosts:
     - "{{ .Values.baseDomain }}"
-    - "*.{{ .Values.baseDomain }}"
+    - "{{ .Values.subDomain }}.{{ .Values.baseDomain }}"
     tls:
       mode: SIMPLE
       credentialName: {{ .Values.appName }}-tls
