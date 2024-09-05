@@ -6,7 +6,7 @@ metadata:
 spec:
   hosts:
   - "{{ .Values.baseDomain }}"
-  - "*.{{ .Values.baseDomain }}"
+  # - "*.{{ .Values.baseDomain }}"
   - "{{ .Values.routes.subDomain }}.{{ .Values.baseDomain }}"
   gateways:
   - istio-system/default-gateway
