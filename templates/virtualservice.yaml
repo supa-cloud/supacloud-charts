@@ -6,9 +6,10 @@ metadata:
 spec:
   hosts:
   - "{{ .Values.baseDomain }}"
+  - "*.{{ .Values.baseDomain }}"
   - "{{ .Values.routes.subDomain }}.{{ .Values.baseDomain }}"
   gateways:
-  - default-gateway
+  - istio-system/default-gateway
   http:
   # - match:
   #   - uri:
