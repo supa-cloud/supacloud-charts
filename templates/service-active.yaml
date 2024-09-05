@@ -7,7 +7,8 @@ metadata:
     app: {{ .Values.appName }}
 spec:
   ports:
-  - port: {{ .Values.service.port }}
+  - name: http-web
+    port: {{ .Values.service.port }}
     protocol: TCP
     targetPort: {{ .Values.container.port }}
   selector:
