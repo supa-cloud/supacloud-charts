@@ -5,8 +5,7 @@ metadata:
   namespace: {{ .Values.namespace }}
 spec:
   hosts:
-  - "{{ .Values.baseDomain }}"
-  - "*.{{ .Values.baseDomain }}"  # Uncomment this to allow wildcard subdomains
+  # - "{{ .Values.baseDomain }}"
   - "{{ .Values.routes.subDomain }}.{{ .Values.baseDomain }}"
   gateways:
   - istio-system/default-gateway
@@ -32,4 +31,3 @@ spec:
         host: {{ .Values.appName }}-active.{{ .Values.namespace }}.svc.cluster.local
         port:
           number: {{ .Values.service.port }}
-          
