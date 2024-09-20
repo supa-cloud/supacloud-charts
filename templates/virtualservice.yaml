@@ -6,7 +6,7 @@ metadata:
 spec:
   hosts:
   - "{{ .Values.baseDomain }}"
-  # - "*.{{ .Values.baseDomain }}"
+  - "*.{{ .Values.baseDomain }}"  # Uncomment this to allow wildcard subdomains
   - "{{ .Values.routes.subDomain }}.{{ .Values.baseDomain }}"
   gateways:
   - istio-system/default-gateway
@@ -16,7 +16,7 @@ spec:
         prefix: "/.well-known/acme-challenge/"
     route:
     - destination:
-        host: cm-acme-http-solver-service
+        host: cm-acme-http-solver-service.{{ .Values.namespace }}.svc.cluster.local
         port:
           number: 8089
   - match:
@@ -24,45 +24,12 @@ spec:
         exact: "{{ .Values.routes.subDomain }}.{{ .Values.baseDomain }}"
     route:
     - destination:
-        host: {{ .Values.appName }}-active
+        host: {{ .Values.appName }}-active.{{ .Values.namespace }}.svc.cluster.local
         port:
           number: {{ .Values.service.port }}
   - route:
     - destination:
-        host: {{ .Values.appName }}-active
+        host: {{ .Values.appName }}-active.{{ .Values.namespace }}.svc.cluster.local
         port:
           number: {{ .Values.service.port }}
-
-# apiVersion: networking.istio.io/v1beta1
-#    kind: VirtualService
-#    metadata:
-#      name: test-sm-api-19-vs
-#      namespace: argocd
-#    spec:
-#      gateways:
-#      - test-sm-api-19-gateway
-#      hosts:
-#      - "supamail.io"
-#      - "*.supamail.io"
-#      http:
-#      - match:
-#        - uri:
-#            prefix: "/.well-known/acme-challenge/"
-#        route:
-#        - destination:
-#            host: cm-acme-http-solver-service
-#            port:
-#              number: 8089
-#      - match:
-#        - authority:
-#            exact: api.supamail.io
-#        route:
-#        - destination:
-#            host: test-sm-api-19-active
-#            port:
-#              number: 4040
-#      - route:
-#        - destination:
-#            host: test-sm-api-19-active
-#            port:
-#              number: 4040
+          
