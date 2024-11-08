@@ -1,7 +1,8 @@
 # appName: test-argo-app
 # namespace: default
 # replicaCount: 2
-# routes: ["api.devopsjourney.com"]
+# routes: 
+#   - domain: "api.devopsjourney.com"
 # image:
 #   repository: devopsjourney1/mywebapp
 #   tag: latest

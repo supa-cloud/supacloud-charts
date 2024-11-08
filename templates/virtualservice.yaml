@@ -6,23 +6,18 @@ metadata:
 spec:
   hosts:
   {{- range .Values.routes }}
-  - "{{ .domain }}"
+    - "{{ .domain }}"
   {{- end }}
   gateways:
-  - istio-system/default-gateway
+    - istio-system/default-gateway
   http:
   {{- range .Values.routes }}
-  - match:
-    - authority:
-        exact: "{{ .domain }}"
+    - match:
+        - authority:
+            exact: "{{ .domain }}"
+      route:
+        - destination:
+            host: {{ .Values.appName }}-active.{{ .Values.namespace }}.svc.cluster.local
+            port:
+              number: {{ .Values.service.port }}
   {{- end }}
-    route:
-    - destination:
-        host: {{ .Values.appName }}-active.{{ .Values.namespace }}.svc.cluster.local
-        port:
-          number: {{ .Values.service.port }}
-  - route:
-    - destination:
-        host: {{ .Values.appName }}-active.{{ .Values.namespace }}.svc.cluster.local
-        port:
-          number: {{ .Values.service.port }}
