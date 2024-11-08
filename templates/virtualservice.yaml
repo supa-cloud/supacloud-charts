@@ -11,13 +11,16 @@ spec:
   gateways:
     - istio-system/default-gateway
   http:
+  {{- $appName := .Values.appName }}
+  {{- $namespace := .Values.namespace }}
+  {{- $servicePort := .Values.service.port }}
   {{- range .Values.routes }}
     - match:
         - authority:
             exact: "{{ .domain }}"
       route:
         - destination:
-            host: {{ .Values.appName }}-active.{{ .Values.namespace }}.svc.cluster.local
+            host: {{ $appName }}-active.{{ $namespace }}.svc.cluster.local
             port:
-              number: {{ .Values.service.port }}
+              number: {{ $servicePort }}
   {{- end }}
