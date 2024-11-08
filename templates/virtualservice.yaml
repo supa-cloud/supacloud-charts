@@ -5,22 +5,17 @@ metadata:
   namespace: {{ .Values.namespace }}
 spec:
   hosts:
-  # - "{{ .Values.baseDomain }}"
-  - "{{ .Values.routes.subDomain }}.{{ .Values.baseDomain }}"
+  {{- range .Values.routes }}
+  - "{{ .domain }}"
+  {{- end }}
   gateways:
   - istio-system/default-gateway
   http:
-  # - match:
-  #   - uri:
-  #       prefix: "/.well-known/acme-challenge/"
-  #   route:
-  #   - destination:
-  #       host: cm-acme-http-solver-service.{{ .Values.namespace }}.svc.cluster.local
-  #       port:
-  #         number: 8089
+  {{- range .Values.routes }}
   - match:
     - authority:
-        exact: "{{ .Values.routes.subDomain }}.{{ .Values.baseDomain }}"
+        exact: "{{ .domain }}"
+  {{- end }}
     route:
     - destination:
         host: {{ .Values.appName }}-active.{{ .Values.namespace }}.svc.cluster.local
