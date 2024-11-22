@@ -1,0 +1,14 @@
+{{- if .Values.container.stringMounts }}
+{{- range .Values.container.stringMounts }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $.Values.appName }}-{{ .name }}
+  namespace: {{ $.Values.namespace }}
+data:
+  {{- range $key, $value := .data }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}
+{{- end }}
+{{- end }}

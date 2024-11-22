@@ -13,6 +13,15 @@
 #     BG_COLOR: "#FFFFFF"
 #     FONT_COLOR: "#000000"
 #     CUSTOM_HEADER: "Hello from Helm!"
+#   # String mounts configuration
+#   stringMounts:
+#     - name: config-env
+#      data:
+#        DATABASE_URL: "postgresql://user:pass@localhost:5432/db"
+#        API_KEY: "secret-key"
+#     - name: another-config
+#       data:
+#         FEATURE_FLAGS: "feature1=true,feature2=false"
 #   resources:
 #     requests:
 #       memory: "2Gi"
