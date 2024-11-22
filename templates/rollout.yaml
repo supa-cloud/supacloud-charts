@@ -37,7 +37,7 @@ spec:
       {{- range .Values.container.stringMounts }}
       - name: {{ .name }}
         configMap:
-          name: {{ $.Values.appName }}-{{ .name }}
+          name: {{ $.Values.appName }}-{{ .name | trimSuffix "-" }}
       {{- end }}
       containers:
       - name: {{ .Values.appName }}
@@ -73,7 +73,7 @@ spec:
         - name: {{ $key }}
           valueFrom:
             configMapKeyRef:
-              name: {{ $.Values.appName }}-{{ $.name }}
+              name: {{ $.Values.appName }}-{{ $.name | trimSuffix "-" }}
               key: {{ $key }}
         {{- end }}
         {{- end }}
