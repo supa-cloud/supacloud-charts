@@ -7,9 +7,9 @@ metadata:
   name: {{ $.Values.appName }}-{{ .name | lower }}
   namespace: {{ $.Values.namespace }}
 data:
-  {{- range $key, $value := .data }}
-  {{ $key }}: |
-    {{ $value | indent 4 }}
+  {{- range .data }}
+  {{ .key }}: |
+    {{ .value | nindent 4 }}
   {{- end }}
 {{- end }}
 {{- end }}
