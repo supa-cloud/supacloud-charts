@@ -37,7 +37,7 @@ spec:
       {{- range .Values.container.stringMounts }}
       - name: {{ .name }}
         configMap:
-          name: {{ printf "%s-%s" $.Values.appName .name | default "default-name" | trimSuffix "-" }}
+          name: {{ printf "%s-%s" $.Values.appName .name | lower }}
       {{- end }}
       containers:
       - name: {{ .Values.appName }}
@@ -65,16 +65,16 @@ spec:
         {{- end }}
         env:
         {{- range $key, $value := .Values.container.env }}
-        - name: {{ $key | default "DEFAULT_ENV" }}
+        - name: {{ $key }}
           value: {{ $value | quote }}
         {{- end }}
         {{- range .Values.container.stringMounts }}
         {{- range $key, $value := .data }}
-        - name: {{ $key | default "DEFAULT_KEY" }}
+        - name: {{ $key }}
           valueFrom:
             configMapKeyRef:
-              name: {{ printf "%s-%s" $.Values.appName .name | default "default-name" | trimSuffix "-" }}
-              key: {{ $key | default "DEFAULT_KEY" }}
+              name: {{ printf "%s-%s" $.Values.appName .name | lower }}
+              key: {{ $key }}
         {{- end }}
         {{- end }}
         resources:

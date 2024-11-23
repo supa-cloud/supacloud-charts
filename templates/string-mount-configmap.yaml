@@ -8,7 +8,8 @@ metadata:
   namespace: {{ $.Values.namespace }}
 data:
   {{- range $key, $value := .data }}
-  {{ $key | quote }}: {{ $value | quote }}
+  {{ $key }}: |
+    {{ $value | nindent 4 }}
   {{- end }}
 {{- end }}
 {{- end }}
