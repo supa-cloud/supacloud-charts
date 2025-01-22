@@ -9,7 +9,7 @@ spec:
     - "{{ .domain }}"
   {{- end }}
   gateways:
-    - istio-system/default-gateway
+    - istio-system/{{ .Values.gateway }}
   http:
   {{- $appName := .Values.appName }}
   {{- $namespace := .Values.namespace }}
