@@ -1,0 +1,57 @@
+appName: mmc-api-dev
+namespace: mmc-dev
+replicaCount: 2
+image:
+  repository: registry.digitalocean.com/sunyaias/mmc-api
+  tag: dev
+  pullPolicy: IfNotPresent
+imagePullSecrets:
+  - name: mmc-registry
+container:
+  port: 4040
+  env:
+    APP_ENV: staging
+    POSTGRES_SYNCHRONIZE: "false"
+    POSTGRES_LOGGING: "false"
+    DISABLE_MAIL_PROCESSOR: "true"
+  stringMounts: []
+  resources:
+    requests: { cpu: 100m, memory: 256Mi }
+    limits: { cpu: 1000m, memory: 512Mi }
+service:
+  port: 4040
+routes:
+  - domain: api-dev.mailmycampaign.com
+existingSecret: mmc-api-secrets
+existingConfigMap: mmc-api-config
+serviceAccount:
+  create: true
+  name: mmc-api
+  annotations:
+    eks.amazonaws.com/role-arn: REPLACE_WITH_RUNTIME_ROLE_ARN
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+probes:
+  readiness: { path: /health, initialDelaySeconds: 5, periodSeconds: 5 }
+  liveness: { path: /health, initialDelaySeconds: 15, periodSeconds: 10 }
+  startup: { path: /health, failureThreshold: 30, periodSeconds: 2 }
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+worker:
+  enabled: true
+  replicaCount: 2
+  command: ["node", "dist/main-worker"]
+  resources:
+    requests: { cpu: 100m, memory: 256Mi }
+    limits: { cpu: 1000m, memory: 512Mi }
+migration:
+  enabled: true
+  command: ["node", "node_modules/typeorm/cli.js", "-d", "dist/database/data-source.js", "migration:run"]
+  resources:
+    requests: { cpu: 50m, memory: 128Mi }
+    limits: { cpu: 500m, memory: 512Mi }

@@ -1,0 +1,57 @@
+{{- if .Values.worker.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.appName }}-worker
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.appName }}-worker
+spec:
+  replicas: {{ default 1 .Values.worker.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.appName }}-worker
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName }}-worker
+    spec:
+      {{- if .Values.serviceAccount.create }}
+      serviceAccountName: {{ default .Values.appName .Values.serviceAccount.name }}
+      {{- else if .Values.serviceAccount.name }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      {{- end }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ default 30 .Values.worker.terminationGracePeriodSeconds }}
+      containers:
+      - name: worker
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command:
+          {{- toYaml .Values.worker.command | nindent 10 }}
+        {{- if or .Values.existingSecret .Values.existingConfigMap }}
+        envFrom:
+        {{- if .Values.existingSecret }}
+        - secretRef:
+            name: {{ .Values.existingSecret }}
+        {{- end }}
+        {{- if .Values.existingConfigMap }}
+        - configMapRef:
+            name: {{ .Values.existingConfigMap }}
+        {{- end }}
+        {{- end }}
+        env:
+        {{- range $key, $value := .Values.container.env }}
+        - name: {{ $key }}
+          value: {{ $value | quote }}
+        {{- end }}
+        - name: PROCESS_ROLE
+          value: worker
+        - name: DISABLE_MAIL_PROCESSOR
+          value: "true"
+        resources:
+          {{- toYaml .Values.worker.resources | nindent 10 }}
+{{- end }}

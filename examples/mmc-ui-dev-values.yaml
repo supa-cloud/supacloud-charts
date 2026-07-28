@@ -1,0 +1,40 @@
+appName: mmc-ui-dev
+namespace: mmc-dev
+replicaCount: 2
+image:
+  repository: registry.digitalocean.com/sunyaias/mmc-ui
+  tag: dev
+  pullPolicy: IfNotPresent
+imagePullSecrets:
+  - name: mmc-registry
+container:
+  port: 3000
+  env: {}
+  stringMounts: []
+  resources:
+    requests: { cpu: 100m, memory: 256Mi }
+    limits: { cpu: 500m, memory: 512Mi }
+service:
+  port: 3000
+routes:
+  - domain: app-dev.mailmycampaign.com
+existingSecret: mmc-ui-secrets
+existingConfigMap: mmc-ui-config
+serviceAccount:
+  create: true
+  name: mmc-ui
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+probes:
+  readiness: { path: /, initialDelaySeconds: 5, periodSeconds: 5 }
+  liveness: { path: /, initialDelaySeconds: 15, periodSeconds: 10 }
+  startup: { path: /, failureThreshold: 30, periodSeconds: 2 }
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+worker: { enabled: false }
+migration: { enabled: false }

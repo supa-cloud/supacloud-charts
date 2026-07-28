@@ -29,15 +29,26 @@ spec:
       labels:
         app: {{ .Values.appName }}
     spec:
+      {{- if .Values.serviceAccount.create }}
+      serviceAccountName: {{ default .Values.appName .Values.serviceAccount.name }}
+      {{- else if .Values.serviceAccount.name }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml .Values.imagePullSecrets | nindent 8 }}
       {{- end }}
+      {{- if .Values.container.stringMounts }}
       volumes:
       {{- range .Values.container.stringMounts }}
       - name: {{ .name }}
         configMap:
           name: {{ printf "%s-%s" $.Values.appName .name | lower }}
+      {{- end }}
       {{- end }}
       containers:
       - name: {{ .Values.appName }}
@@ -61,6 +72,29 @@ spec:
             port: {{ .Values.container.port }}
           initialDelaySeconds: {{ .Values.probes.liveness.initialDelaySeconds }}
           periodSeconds: {{ .Values.probes.liveness.periodSeconds }}
+        {{- end }}
+        {{- if .Values.probes.startup }}
+        startupProbe:
+          httpGet:
+            path: {{ .Values.probes.startup.path }}
+            port: {{ .Values.container.port }}
+          failureThreshold: {{ default 30 .Values.probes.startup.failureThreshold }}
+          periodSeconds: {{ default 2 .Values.probes.startup.periodSeconds }}
+        {{- end }}
+        {{- end }}
+        {{- with .Values.container.securityContext }}
+        securityContext:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- if or .Values.existingSecret .Values.existingConfigMap }}
+        envFrom:
+        {{- if .Values.existingSecret }}
+        - secretRef:
+            name: {{ .Values.existingSecret }}
+        {{- end }}
+        {{- if .Values.existingConfigMap }}
+        - configMapRef:
+            name: {{ .Values.existingConfigMap }}
         {{- end }}
         {{- end }}
         env:

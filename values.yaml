@@ -46,3 +46,33 @@
 #     path: /healthz
 #     initialDelaySeconds: 15
 #     periodSeconds: 10
+
+# Production extensions. Keep secrets in an existing Kubernetes Secret or an
+# ExternalSecret; do not pass credentials as Helm parameters.
+existingSecret: ""
+existingConfigMap: ""
+serviceAccount:
+  create: false
+  name: ""
+  annotations: {}
+  automountServiceAccountToken: true
+podSecurityContext: {}
+podDisruptionBudget:
+  enabled: false
+  minAvailable: 1
+worker:
+  enabled: false
+  replicaCount: 1
+  command: ["node", "dist/main-worker"]
+  terminationGracePeriodSeconds: 30
+  resources:
+    requests: { cpu: 100m, memory: 256Mi }
+    limits: { cpu: 1000m, memory: 512Mi }
+migration:
+  enabled: false
+  command: ["node", "node_modules/typeorm/cli.js", "-d", "dist/database/data-source.js", "migration:run"]
+  backoffLimit: 2
+  ttlSecondsAfterFinished: 600
+  resources:
+    requests: { cpu: 50m, memory: 128Mi }
+    limits: { cpu: 500m, memory: 512Mi }
